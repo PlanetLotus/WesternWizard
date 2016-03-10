@@ -11,13 +11,37 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        coll = GetComponent<BoxCollider2D>();
         spell = (GameObject)Resources.Load("Spell");
+
+        // Bad...depends on ordering of child objects in prefab
+        headSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        torsoSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        legsSprite = transform.GetChild(2).GetComponent<SpriteRenderer>();
+
         nextShotTimeStamp = 0;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && nextShotTimeStamp <= Time.time)
+        // Can't shoot while dodging
+        if (!isDodging && Input.GetKey(KeyCode.Q))
+        {
+            DodgeTop();
+        }
+        else if (!isDodging && Input.GetKey(KeyCode.W))
+        {
+            DodgeMiddle();
+        }
+        else if (!isDodging && Input.GetKey(KeyCode.E))
+        {
+            DodgeBottom();
+        }
+        else if (Input.GetKeyUp(KeyCode.Q) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.E))
+        {
+            ResetDodge();
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && nextShotTimeStamp <= Time.time)
         {
             Shoot();
             nextShotTimeStamp = Time.time + shotCooldownInSeconds;
@@ -44,6 +68,56 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void DodgeTop()
+    {
+        torsoSprite.enabled = false;
+        legsSprite.enabled = false;
+
+        // Layer 12 is "PlayerDodging"
+        torsoSprite.gameObject.layer = 12;
+        legsSprite.gameObject.layer = 12;
+
+        isDodging = true;
+    }
+
+    private void DodgeMiddle()
+    {
+        headSprite.enabled = false;
+        legsSprite.enabled = false;
+
+        // Layer 12 is "PlayerDodging"
+        headSprite.gameObject.layer = 12;
+        legsSprite.gameObject.layer = 12;
+
+        isDodging = true;
+    }
+
+    private void DodgeBottom()
+    {
+        headSprite.enabled = false;
+        torsoSprite.enabled = false;
+
+        // Layer 12 is "PlayerDodging"
+        headSprite.gameObject.layer = 12;
+        torsoSprite.gameObject.layer = 12;
+
+        isDodging = true;
+    }
+
+    private void ResetDodge()
+    {
+        headSprite.enabled = true;
+        torsoSprite.enabled = true;
+        legsSprite.enabled = true;
+
+        // Layer 8 is "Player"
+        headSprite.gameObject.layer = 8;
+        torsoSprite.gameObject.layer = 8;
+        legsSprite.gameObject.layer = 8;
+
+        isDodging = false;
+    }
+
     private void Shoot()
     {
         Instantiate(spell, new Vector3(transform.position.x + 1, 1.5f), spell.transform.rotation);
@@ -58,8 +132,15 @@ public class PlayerController : MonoBehaviour
     }
 
     private Rigidbody2D rb;
+    private BoxCollider2D coll;
     private GameObject spell;
+
+    private SpriteRenderer headSprite;
+    private SpriteRenderer torsoSprite;
+    private SpriteRenderer legsSprite;
+
     private float nextShotTimeStamp;
+    private bool isDodging;
 
     private const float shotCooldownInSeconds = 1;
 }
