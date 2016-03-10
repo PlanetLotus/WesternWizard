@@ -25,15 +25,15 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // Can't shoot while dodging
-        if (!isDodging && Input.GetKey(KeyCode.Q))
+        if (!isDodging && Input.GetKeyDown(KeyCode.Q))
         {
             DodgeTop();
         }
-        else if (!isDodging && Input.GetKey(KeyCode.W))
+        else if (!isDodging && Input.GetKeyDown(KeyCode.W))
         {
             DodgeMiddle();
         }
-        else if (!isDodging && Input.GetKey(KeyCode.E))
+        else if (!isDodging && Input.GetKeyDown(KeyCode.E))
         {
             DodgeBottom();
         }
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         {
             ResetDodge();
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && nextShotTimeStamp <= Time.time)
+        else if (!isDodging && Input.GetKeyDown(KeyCode.Space) && nextShotTimeStamp <= Time.time)
         {
             Shoot();
             nextShotTimeStamp = Time.time + shotCooldownInSeconds;
