@@ -11,6 +11,17 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spell = (GameObject)Resources.Load("Spell");
+        nextShotTimeStamp = 0;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && nextShotTimeStamp <= Time.time)
+        {
+            Shoot();
+            nextShotTimeStamp = Time.time + shotCooldownInSeconds;
+        }
     }
 
     private void FixedUpdate()
@@ -33,6 +44,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Shoot()
+    {
+        Instantiate(spell, new Vector3(transform.position.x + 1, 1.5f), spell.transform.rotation);
+    }
+
     private void Flip()
     {
         FacingRight = !FacingRight;
@@ -42,4 +58,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private Rigidbody2D rb;
+    private GameObject spell;
+    private float nextShotTimeStamp;
+
+    private const float shotCooldownInSeconds = 1;
 }

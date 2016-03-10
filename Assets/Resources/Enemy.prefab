@@ -45,7 +45,7 @@ GameObject:
   - 50: {fileID: 5071962}
   - 61: {fileID: 6124278}
   - 114: {fileID: 11403834}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
