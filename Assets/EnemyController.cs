@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using Random = UnityEngine.Random;
+
 public class EnemyController : MonoBehaviour
 {
     public GameObject Player;
@@ -27,7 +29,8 @@ public class EnemyController : MonoBehaviour
 
     private void Shoot()
     {
-        Instantiate(bullet, new Vector3(transform.position.x - 1, 1.5f), bullet.transform.rotation);
+        int yOffset = Random.Range(-1, 2);
+        Instantiate(bullet, new Vector3(transform.position.x - 1, 1.5f + yOffset), bullet.transform.rotation);
     }
 
     private Rigidbody2D rb;
