@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 
 public class EnemyController : MonoBehaviour
 {
+    public float xSpeed = 1;
     public GameObject Player;
 
     private void Start()
@@ -24,7 +25,7 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(-1, rb.velocity.y);
+        rb.velocity = new Vector2(-xSpeed, rb.velocity.y);
     }
 
     private void Shoot()
@@ -36,7 +37,7 @@ public class EnemyController : MonoBehaviour
         Vector3 direction = (Player.transform.GetChild(yOffset).position - startingPosition).normalized;
 
         GameObject newBullet = (GameObject)Instantiate(bullet, startingPosition, bullet.transform.rotation);
-        newBullet.GetComponent<Rigidbody2D>().velocity = direction * 10;
+        newBullet.GetComponent<BulletController>().Direction = direction;
     }
 
     private Rigidbody2D rb;

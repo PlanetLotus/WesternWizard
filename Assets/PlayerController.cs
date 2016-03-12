@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public float MoveForce = 365f;
     public float MaxSpeed = 5f;
 
+    public float SpellCooldownInSeconds = 1;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -44,7 +46,7 @@ public class PlayerController : MonoBehaviour
         else if (!isDodging && Input.GetKeyDown(KeyCode.Space) && nextShotTimeStamp <= Time.time)
         {
             Shoot();
-            nextShotTimeStamp = Time.time + shotCooldownInSeconds;
+            nextShotTimeStamp = Time.time + SpellCooldownInSeconds;
         }
     }
 
@@ -141,6 +143,4 @@ public class PlayerController : MonoBehaviour
 
     private float nextShotTimeStamp;
     private bool isDodging;
-
-    private const float shotCooldownInSeconds = 1;
 }
